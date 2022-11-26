@@ -1,7 +1,7 @@
 <template >
     <div class="w-100pr row mb-50px ">
         <BasketProducts class="basket-products"/>
-        <BasketInfo class="basket-info"/>
+        <BasketInfo disable="1" class="basket-info"/>
     </div>
 </template>
 <script>

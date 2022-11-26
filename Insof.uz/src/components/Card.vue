@@ -1,36 +1,35 @@
 <template>
   <div class="wrapper">
-    <!--  -->
-    <div class="product shadow-3"  v-for=" product , i  in products" :key="i" >
+    <div>
+      <q-dialog v-model="alert">
+        <CompModal :product="alert_product"/>
+      </q-dialog>
+    </div>
+    <div class="product shadow-3" v-for="product,i in props.products" :key="i">
       <div class="product__main">
-        <router-link :to="'/detail/'+ product.id" class="product__link" >
-          <div v-if="product.chegirma_foizi.length>=1 ?true :false" class="discount">
-            <div  class="discount__mark">
-              Chegirma
-            </div>
-            <div  class="discount__persent">
-              {{product.chegirma_foizi}}%
-            </div>
-          </div>
-          <div v-if="product.chegirma_foizi.length<1 ?true :false" class=" h-50px w-100pr">
-          </div>
-          
-            <q-img
-              class="img"
-              :src="product.rasmlari[0].link"
-              width="200"
-              height="200px"
-              alt="title"
-            />
-         
+        
+        <div v-if="product.chegirma_foizi.length>=1 ?true :false" class="discount">
+          <div class="discount__mark">Chegirma</div>
+          <div class="discount__persent">{{product.chegirma_foizi}}%</div>
+        </div>
+        
+        <div v-if="product.chegirma_foizi.length<1 ?true :false" class=" h-40px w-100pr"></div>
+        
+        <router-link :to="'/detail/'+ product.id" class="product__link" @click="refresh(i)" >
+          <q-img class="img"
+            :src="product.rasmlari[0].link"
+             height="160px" 
+             alt="title" 
+          />
+        
           <div class="product__spacer">
-            <div class="product__title text-h5">{{product.nomi}}</div>
+            <div class="product__title text-h6 mt-10px">{{product.nomi}}</div>
           </div>
           <div class="product__spacer">
             <div class="product__prices row justify-center">
-              <div v-if="product.chegirma_narx.length>1 ?true :false" class="product__price none-discount"> <del>{{product.narx}} so'm</del> </div>
+              <div v-if="product.chegirma_narx.length>1 ?true :false"  class="product__price none-discount"> <del>{{product.narx}} so'm</del> </div>
+              <div v-if="product.chegirma_narx.length<1 ?true :false"  class="product__price with-discount mt-20px "> {{product.narx}} so'm </div>
               <div v-if="product.chegirma_narx.length>1 ?true :false" class="product__price with-discount">{{product.chegirma_narx}} so'm</div>
-              <div v-if="product.chegirma_narx.length<1 ?true :false" class=" mt-30px product__price with-discount">{{product.narx}} so'm</div>
             </div>
           </div>
           <div class="product__spacer">
@@ -40,8 +39,14 @@
           </div>
         </router-link>
         <div class="product__spacer">
-          <div class="button">
-            <q-btn rounded class="btn full-width shadow-7">button</q-btn>
+          <div class="button row justify-center">
+            <q-btn 
+              rounded 
+              class="btn shadow-7 mb-20px"
+              padding="10px 50px 10px 50px"
+              @click="getAlertApi(i)"> 
+              <q-icon name="shopping_cart" />
+            </q-btn>
           </div>
         </div>
       </div>
@@ -49,53 +54,31 @@
   </div>
 </template>
 <script setup>
-  import { ref } from "vue";  
-  import { useCounterStore } from "../stores/index";
+import { ref } from "vue";  
+import CompModal from "./CompModal.vue";
+import { useCounterStore } from "../stores/index";
   const store = useCounterStore();
+
+  const props = defineProps({products: Array})
+  const emits = defineEmits(["refresh"])
+
+ // dialog oynasi uchun
+  const alert_product = ref([])
+  const alert=ref(false)
+  function getAlertApi(i){
+    alert_product.value=[]
+    alert_product.value.push(props.products[i])
+    alert.value=true
+  }
+   
   
-  const props = defineProps({
-    type: String
-  })
-
-    const products_api = ref([])
-    const products = ref([])
-    // bekentdan malumotlar kelishi uchun   0.5 s oraliqda qayta ishlaydi
-    let getpro = setInterval(() => {
-      products_api.value=store.ProductsApi
-      return products_api
-    }, 500);
-
-    // maxsulotlarni saralash uchun
-    function GetFilterProducts(){
-      
-      if(props.type=='discount'){
-        products.value=products_api.value.filter(function(elem){
-          return elem.chegirma_foizi>0 && elem.chegirma_foizi<10
-        })
-      }
-      else if(props.type=='mega_discount'){
-        products.value=products_api.value.filter(function(elem){
-          return elem.chegirma_foizi>=10
-        })
-      }
-      else if(props.type=='necessary'){
-        products.value=products_api.value.filter(function(elem){
-          return elem
-        })
-      }
-    
-    }
-
-    let gettesting  = setInterval(() => { 
-      if(products_api.value.length>0){
-        clearInterval(getpro) ;
-        GetFilterProducts() ;
-        clearInterval(gettesting) 
-      }
-      
-    }, 505);
-
-    
+  const id = ref('')
+  const product=[]
+  function refresh(i){
+    product.value=props.products
+    id.value=product.value[i].id
+    emits("refresh" , id.value )
+  }
 </script>
 <style lang="sass" scoped>
 .wrapper
@@ -107,11 +90,12 @@
     flex-wrap: wrap
 .product
     width: 200px
-    border: 1px solid #fffff
+    //height: 400px
+    border: 1px solid #fff
+    // box-shadow: 5px 5px 5px 5px rgba(0,0,0, .15)
     border-radius: 10px
     margin: 20px auto
     // margin: 20px 20px 20px 0
-
 .product__main
     width: 90%
     margin: 0 auto
@@ -120,13 +104,12 @@
     justify-content: center
     // align-items: center
     // letter-spacing: 1em
-    line-height: 1.75em
-  
-.product__spacer
-    padding-top: 10px
+    // line-height: 1.75em
+
+
 .discount
     width: 100%
-    height: 35px
+    // height: 35px
     display: flex
     justify-content: space-between
     align-items: center
@@ -145,7 +128,7 @@
 .product__price
     width: 90%
     text-align: center
-    font-size: 1.2em
+    font-size: 1.1em
     font-weight: bold
 .product__description
     width: 100%
@@ -156,12 +139,6 @@
     background-color: red
     border-radius: 5px
     color: #fff
-.button
-    width: 80%
-    margin: 0 auto
-    margin-bottom: 20px
-    display: flex
-    justify-content: center
 .btn
     background: linear-gradient(89.97deg, #33042e 52.52%, #8f1182 110.06%)
     color: #fff

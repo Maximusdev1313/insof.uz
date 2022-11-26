@@ -29,7 +29,7 @@
             color="white"
           />
         </router-link>
-        <q-btn to="/basket">Karzinka</q-btn>
+        <q-btn to="/basket"> <q-icon class="mr-10px" name="shopping_cart" /> {{ store.AllPrinceProducts }} so'm </q-btn>
       </div>
     </q-header>
 
@@ -74,10 +74,14 @@
 // api ni olish  piniadan kelayotgan funksiya orqali
   store.GET_PRODUCTS_API();
 
-  // search_product qiymatini 2 s dan keyin umumiy maxsulotlarga tenglashtiradi
-  setTimeout(() => {
-    search_product.value=store.ProductsApi
-  }, 2000);
+  // search_product qiymatini umumiy maxsulotlarga tenglashtiradi
+  let gettesting = setInterval(() => {
+    if (store.ProductsApi.length > 0) {
+      search_product.value=store.ProductsApi
+      clearInterval(gettesting);
+    }
+    console.log(" main leaut  setInterval ");
+  }, 505);
   // maxsulotlarni qidirish 
   watch(search_text, ()=>{
     search_product.value=[]

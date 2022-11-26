@@ -1,30 +1,32 @@
 <template>
   <div class="products">
     <div class="products__body">
-      <div class="products__title">В корзине 2 товара</div>
+      <div class="products__title">Savatda {{store.Orders.length}} ta mahsulot bor </div>
         <div class="products__line q-mt-md">
             <q-separator />
         </div>
-      <div class="products-product" v-for="i in 4" :key="i">
+      <div class="products-product" v-for="product , i  in store.Orders" :key="i">
         <div class="product">
             <div class="product__img">
                 <q-img
-                    src="https://olcha.uz/image/original/products/SkJF0ugd9f0Re05mUkLfVzPTG2C5ZnzWHHexzydC8wGG408ipNT45WbXvNEA."
-                    alt=""
+                  :src="product.rasmlari[0].link"
+                  alt=""
                 />
             </div>
             <div class="product__info">
-                <p class="product__name">Ноутбук HP</p>
-                <p class="product__price">Narxi: 15000 so'm</p>
+              <p class="product__name">{{product.nomi}}</p>
+              <div v-if="product.chegirma_foizi<1 ?true :false" class="product__price">Narxi: {{product.narx}} so'm </div>
+              <div v-if="product.chegirma_foizi>0 ?true :false" class="product__price">Narxi: <del class="mr-10px">{{product.narx}} </del>  {{product.chegirma_narx}} so'm </div>
             </div>
             <div class="product__quantity">
-                <q-icon name="remove_circle_outline" size="22px" />
-                <span class="quantity"> 5 </span>
-                <q-icon name="add_circle_outline" size="22px" color="red" />
+              <q-icon @click="decrement(i)" name="remove_circle" size="22px" />
+              <span class="quantity"> {{product.quantity}} </span>
+              <q-icon @click="increment(i)" name="add_circle" size="22px" color="red" />
             </div>
-            <div class="product__overall-price">15000 so'm</div>
+            <div v-if="product.chegirma_foizi<1 ?true :false" class="product__overall-price">{{product.narx * product.quantity}} so'm</div>
+            <div v-if="product.chegirma_foizi>0 ?true :false" class="product__overall-price">{{product.chegirma_narx * product.quantity}} so'm</div>
             <div class="product__delete">
-                <q-icon name="close" size="25px" color="grey" />
+              <q-icon @click="delet(i)" name="close" size="25px" color="grey" />
             </div>
         </div>
         <div class="product__line mt-10px">
@@ -34,8 +36,23 @@
     </div>
   </div>
 </template>
-<script>
-export default {};
+<script setup>
+import { useCounterStore } from "src/stores/index"
+  const store = useCounterStore()
+
+  function increment(i){
+    store.INCREMENT(store.Orders[i].id)
+    store.ALL_PRINCE_CALCULATION()
+  }
+  function decrement(i){
+    store.DECREMENT(store.Orders[i].id)
+    store.ALL_PRINCE_CALCULATION()
+  }
+  function delet(i){
+    store.DELETE(i)
+    store.ALL_PRINCE_CALCULATION()
+  }
+
 </script>
 <style scoped>
 .products {

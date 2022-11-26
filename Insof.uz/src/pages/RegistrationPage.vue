@@ -1,7 +1,7 @@
 <template>
     <div class="row mt-30px register">
         <UserInfo class="user-info" />
-        <BasketInfo class="basket-info" />
+        <BasketInfo disable="0" class="basket-info" />
     </div>
 </template>
 <script>

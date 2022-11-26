@@ -5,6 +5,13 @@ import axios from "axios"
 export const useCounterStore = defineStore('store', {
   state: () => ({
     ProductsApi:[],
+    Orders:[],
+    AllPrinceProducts:0,
+    AllPrinceProduct:0,
+    Rebate:0,
+    Prince:0,
+    AllRebate:0
+
   }),
 
   // productlarni becentdan qabul qilyabdi
@@ -14,18 +21,54 @@ export const useCounterStore = defineStore('store', {
         const Fetch_Product = await axios.get('https://insofuz.herokuapp.com/productlar/');
         this.ProductsApi = Fetch_Product.data;
         console.log(this.ProductsApi);
-        this.SearchProducts=this.ProductsApi
       }
-
       catch (err) {
         console.log(err);
       }
     },
 
+    INCREMENT(id) {
+      for(let i=0 ; i < this.Orders.length ; i++ ){
+        if(this.Orders[i].id==id && this.Orders[i].quantity<20 ){
+          this.Orders[i].quantity++
+        }
+      }
+    },
+
+    DECREMENT(id) {
+      for(let i=0 ; i < this.Orders.length ; i++ ){
+        if(this.Orders[i].id==id && this.Orders[i].quantity>1 ){
+          this.Orders[i].quantity--
+        }
+      }
+    },
+
+    DELETE(id){
+      this.Orders.splice(id,1)
+    },
+
+    ALL_PRINCE_CALCULATION(){
+      this.AllPrinceProducts=0
+      this.AllRebate=0
+      this.Orders.forEach(elem => {
+        this.AllPrinceProduct=0
+        this.Rebate=0
+        this.Prince=0
+        if(elem.chegirma_narx > 0){
+          this.AllPrinceProduct=elem.chegirma_narx*elem.quantity
+          this.Prince=elem.narx*elem.quantity
+          this.Rebate=this.Prince-this.AllPrinceProduct
+        }
+        else{
+          this.AllPrinceProduct=elem.narx*elem.quantity
+        }
+        this.AllPrinceProducts+=this.AllPrinceProduct
+        this.AllRebate+=this.Rebate
+      });
+    }
+
   },
-
-
-
+  
 })
 
 /*

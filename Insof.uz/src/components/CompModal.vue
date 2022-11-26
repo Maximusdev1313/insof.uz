@@ -1,6 +1,112 @@
 <template >
-</template>
+  <q-card style="width: 700px; max-width: 80vw;">
+    <q-card-section>
+      <div class="text-h6">Bo'lib to'lash</div>
+    </q-card-section>
 
+    <q-card-section class="q-pt-none">
+      <div class="  row  justify-between items-start content-between">
+        <div class="modal__img">
+          <q-img
+            :src="props.product[0].rasmlari[0].link">
+          </q-img>
+        </div>
+        <div class="modal__text">
+          <p class="p-1">{{props.product[0].nomi}}</p>
+          <p v-if="props.product[0].chegirma_narx > 0 ?true :false" style="color: #999999;">Narxi: <del> {{props.product[0].narx}} so'm</del></p>
+          <p v-if="props.product[0].chegirma_narx < 1 ?true :false" style="color: #999999;">Narxi: <span> {{props.product[0].narx}} so'm</span></p>
+          <p v-if="props.product[0].chegirma_narx > 0 ?true :false" style="color: #999999;"> Chegirma Narxi: <span> {{props.product[0].chegirma_narx}} so'm</span></p>
+          
+        </div>
+        <div class="modal__sena ">
+          <div class="modal__sena--active  row  justify-between">
+            <div><q-btn @click="decrement()" >-</q-btn></div>
+            <div class=" row items-center"> <span>{{quantity}}</span> </div>
+            <div><q-btn @click="increment()" >+</q-btn></div>
+          </div>
+          <div class="q-mt-md">
+            <span v-if="props.product[0].chegirma_narx > 0 ?true :false">  {{props.product[0].chegirma_narx * quantity}} so'm</span>
+            <span v-if="props.product[0].chegirma_narx < 1 ?true :false">  {{props.product[0].narx * quantity}} so'm</span>
+          </div>
+        </div>
+      </div>
+    </q-card-section>
+
+    <q-card-actions align="right" class="bg-white text-teal">
+      <q-btn @click="addOrders()" flat label="OK" v-close-popup />
+    </q-card-actions>
+  </q-card>
+</template>
+<script setup >
+import { ref } from 'vue'
+import { useCounterStore } from "../stores/index"
+  const store = useCounterStore()
+
+  const props=defineProps({
+    product: Array
+  })
+
+  const product=[]
+  product.value=props.product
+  
+  
+
+  // maxsulot miqdorini aniqlash
+  let quantity=ref(1)
+
+  store.Orders.forEach(element => {
+    if(element.id==product.value[0].id){
+      quantity.value=element.quantity
+    }
+    console.log(" comp modal  foreach 1 ");
+  })
+  
+  // maxsulotni sonini qo'shish
+  function increment(){
+    if(quantity.value<20){
+      quantity.value++
+    }
+  }
+  // maxsulotni sonini ayrish
+  function decrement(){
+    if(quantity.value>1){
+      quantity.value--
+    }
+  }
+// store.orders ga ma'lumot qo'shish 
+  function addOrders(){
+    
+    const order={
+      id:product.value[0].id,
+      quantity:quantity.value,
+      nomi:product.value[0].nomi,
+      narx:product.value[0].narx,
+      chegirma_foizi:product.value[0].chegirma_foizi,
+      chegirma_narx:product.value[0].chegirma_narx,
+      rasmlari:product.value[0].rasmlari
+    }
+    // maxsulot oldin qo'shilgan yoki qo'shilganligini tekshirish
+    let check
+    check = store.Orders.some(function(elem){
+      return elem.id == product.value[0].id
+    })
+    // maxsulot oldin qo'shilgan bo'lsa uni yangi qiymatini o'rnatish
+    if(check){
+      store.Orders.forEach(element => {
+        if(element.id==product.value[0].id){
+          element.quantity=quantity.value
+        }
+        console.log(" comp modal  foreach 2 ");
+      })
+    }
+    else{
+      store.Orders.push(order)
+      console.log(store.Orders);
+    }
+    store.ALL_PRINCE_CALCULATION()
+  }
+
+</script>
 <style scoped lang="sass">
 .modal__img
   width: 120px
@@ -35,81 +141,3 @@
   .q-btn:before
     box-shadow: none
 </style>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- <template>
-  <div>
-    <q-dialog class="bacdrop" v-model="showModal">
-      <div class="modal">
-          <h1>{{header}}</h1>
-      </div>
-      <q-btn @click="showModal = false">yopish</q-btn>
-    </q-dialog>
-    <q-btn @click="showModal = true">ochish</q-btn>
-  </div>
-</template>
-<script>
-export default {
-  data(){
-    return{
-      showModal: false
-    }
-  },
-  props:['header', 'showModal'],
-  methods: {
-   closeModall(){
-    this.$emit('close')
-   }
-  },
-}
-</script>
-<style scoped lang="sass">
-.bacdrop
-  top: 0
-  position: fixed
-  background-color: rgba(0,0,0,0.5 )
-  width: 100%
-  height: 100%
-.modal
-  bottom: 0
-  width: 80%
-  height: 500px
-  margin: 0 auto
-  background-color: white
-</style> -->

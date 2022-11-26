@@ -1,8 +1,8 @@
 <template>
   <div>
     <div>
-      <q-dialog  v-model="medium" >
-        <comp-modal/>
+      <q-dialog v-model="alert">
+        <CompModal :product="alert_product"/>
       </q-dialog>
     </div>
     <div class="container">
@@ -45,7 +45,12 @@
             </router-link>
             <div class="product__spacer">
               <div class="button row justify-center">
-                <q-btn   @click="medium = true" class="btn shadow-7 mb-20px" padding="5px 40px 5px 40px" >button </q-btn>
+                <q-btn 
+                  rounded 
+                  class="btn shadow-7 mb-20px"
+                  padding="10px 50px 10px 50px"> 
+                  <q-icon name="shopping_cart" />
+                </q-btn>
               </div>
             </div>
           </div>
@@ -155,6 +160,9 @@ import { useCounterStore } from "../stores/index";
     // background: linear-gradient(89.97deg, #33042e 52.52%, #8f1182 110.06%)
     background-color: red
     border-radius: 5px
+    color: #fff
+.btn
+    background: linear-gradient(89.97deg, #33042e 52.52%, #8f1182 110.06%)
     color: #fff
 
 </style>
