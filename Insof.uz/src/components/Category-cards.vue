@@ -1,55 +1,26 @@
 <template>
   <div class="category">
-    <div class="card">
-      <a href="#" class="card__link">
+    <div class="card" v-for=" (categoriya , i ) in store.CategoriyasApi" :key="i">
+      <router-link :to="('/categoriya/'+categoriya.id)" class="card__link">
         <div class="card__main">
           <q-img
-            src="https://olcha.uz/image/380x132/discount/KK/Ko/dP/1663671523.png"
-            class="img"
+            :src="categoriya.rasmlar[0].link"
+            class="img card__img"
+            
           >
-            <div class="absolute-full text-subtitle2 flex flex-center">
-              Title
+            <div class="absolute-full fs-18px flex flex-center">
+              {{ categoriya.categoriya_nomi }}
             </div>
           </q-img>
         </div>
-      </a>
-    </div>
-    <div class="card">
-      <a href="#" class="card__link">
-        <div class="card__main">
-          <q-img
-            src="https://olcha.uz/image/380x132/discount/KK/Ko/dP/1663671523.png"
-            class="img"
-          >
-            <div class="absolute-full text-subtitle2 flex flex-center">
-              Title
-            </div>
-          </q-img>
-        </div>
-      </a>
-    </div>
-    <div class="card">
-      <a href="#" class="card__link">
-        <div class="card__main">
-          <q-img
-            src="https://olcha.uz/image/380x132/discount/KK/Ko/dP/1663671523.png"
-            class="img"
-          >
-            <div class="absolute-full text-subtitle2 flex flex-center">
-              Title
-            </div>
-          </q-img>
-        </div>
-      </a>
+      </router-link>
     </div>
   </div>
 </template>
-<script >
-import { defineComponent } from "vue";
+<script setup >
+import { useCounterStore } from "../stores/index"
+  const store = useCounterStore()
 
-export default defineComponent({
-  setup() {},
-});
 </script>
 <style lang="sass" scoped>
 .category
@@ -68,5 +39,15 @@ export default defineComponent({
 
 .q-img__content >
     background: rgba(0,0,0, 0.30)
+.card__img
+  height: 270px
+
+@media screen and (min-width:500px) and (max-width:900px)
+  .card__img
+    height: 200px
+@media screen and (max-width:500px) 
+  .card__img
+    height: 120px
+
 </style>
 

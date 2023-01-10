@@ -15,16 +15,16 @@
             </div>
             <div class="product__info">
               <p class="product__name">{{product.nomi}}</p>
-              <div v-if="product.chegirma_foizi<1 ?true :false" class="product__price">Narxi: {{product.narx}} so'm </div>
-              <div v-if="product.chegirma_foizi>0 ?true :false" class="product__price">Narxi: <del class="mr-10px">{{product.narx}} </del>  {{product.chegirma_narx}} so'm </div>
+              <div v-if="product.eski_narx > 0 ?true :false" class="product__price">Narxi: <del class="mr-10px">{{product.eski_narx}} </del>  {{product.chegirma_narx}} so'm </div>
+              <div class="product__price">Narxi: {{product.narx}} so'm </div>
             </div>
             <div class="product__quantity">
               <q-icon @click="decrement(i)" name="remove_circle" size="22px" />
               <span class="quantity"> {{product.quantity}} </span>
               <q-icon @click="increment(i)" name="add_circle" size="22px" color="red" />
             </div>
-            <div v-if="product.chegirma_foizi<1 ?true :false" class="product__overall-price">{{product.narx * product.quantity}} so'm</div>
-            <div v-if="product.chegirma_foizi>0 ?true :false" class="product__overall-price">{{product.chegirma_narx * product.quantity}} so'm</div>
+            <div class="product__overall-price">{{product.narx * product.quantity}} so'm</div>
+           
             <div class="product__delete">
               <q-icon @click="delet(i)" name="close" size="25px" color="grey" />
             </div>

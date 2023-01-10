@@ -11,6 +11,7 @@ const routes = [
       { path:'/orderinfo' , component:()=> import('pages/OrderInfo.vue') },
       { path:'/pinia' , component:()=> import('pages/ForPinia.vue') },
       { path:'/search' , component:()=> import('pages/SearchPage.vue') },
+      { path: '/categoriya/:id/', component: () => import('pages/Categoriya.vue') },
 
     ]
   },

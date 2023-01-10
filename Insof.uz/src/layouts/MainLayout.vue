@@ -75,14 +75,14 @@
   store.GET_PRODUCTS_API();
 
   // search_product qiymatini umumiy maxsulotlarga tenglashtiradi
-  let gettesting = setInterval(() => {
-    if (store.ProductsApi.length > 0) {
-      search_product.value=store.ProductsApi
-      clearInterval(gettesting);
-    }
-    console.log(" main leaut  setInterval ");
-  }, 505);
-  // maxsulotlarni qidirish 
+  // let gettesting = setInterval(() => {
+  //   if (store.ProductsApi.length > 0) {
+  //     search_product.value=store.ProductsApi
+  //     clearInterval(gettesting);
+  //   }
+  //   console.log(" main leaut  setInterval ");
+  // }, 505);
+  // maxsulotlarni qidirish
   watch(search_text, ()=>{
     search_product.value=[]
     for (let i = 0; i < store.ProductsApi.length; i++) {
@@ -96,10 +96,10 @@
         search_product.value.push(store.ProductsApi[i])
       }
     }
-    
-  })  
-  
- 
+
+  })
+
+
 </script>
 
 

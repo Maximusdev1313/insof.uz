@@ -8,12 +8,12 @@
     <div class="product shadow-3" v-for="product,i in props.products" :key="i">
       <div class="product__main">
         
-        <div v-if="product.chegirma_foizi.length>=1 ?true :false" class="discount">
+        <div v-if="product.chegirma_foizi!=null ?true :false" class="discount">
           <div class="discount__mark">Chegirma</div>
           <div class="discount__persent">{{product.chegirma_foizi}}%</div>
         </div>
         
-        <div v-if="product.chegirma_foizi.length<1 ?true :false" class=" h-40px w-100pr"></div>
+        <div v-if="product.chegirma_foizi==null ?true :false" class=" h-40px w-100pr"></div>
         
         <router-link :to="'/detail/'+ product.id" class="product__link" @click="refresh(i)" >
           <q-img class="img"
@@ -27,9 +27,9 @@
           </div>
           <div class="product__spacer">
             <div class="product__prices row justify-center">
-              <div v-if="product.chegirma_narx.length>1 ?true :false"  class="product__price none-discount"> <del>{{product.narx}} so'm</del> </div>
-              <div v-if="product.chegirma_narx.length<1 ?true :false"  class="product__price with-discount mt-20px "> {{product.narx}} so'm </div>
-              <div v-if="product.chegirma_narx.length>1 ?true :false" class="product__price with-discount">{{product.chegirma_narx}} so'm</div>
+              <div v-if="product.chegirma_foizi==null ?true :false" class=" h-20px w-100pr"></div>
+              <div v-if="product.eski_narx!=null ?true :false"  class="product__price none-discount pl-10px "> <del>{{product.eski_narx}} so'm</del> </div>
+              <div  class="product__price with-discount mt-20px pl-10px "> {{product.narx}} so'm </div>
             </div>
           </div>
           <div class="product__spacer">
@@ -127,7 +127,6 @@ import { useCounterStore } from "../stores/index";
     color: black
 .product__price
     width: 90%
-    text-align: center
     font-size: 1.1em
     font-weight: bold
 .product__description

@@ -5,48 +5,55 @@ import axios from "axios"
 export const useCounterStore = defineStore('store', {
   state: () => ({
     ProductsApi:[],
+    CategoriyasApi:[],
     Orders:[],
     AllPrinceProducts:0,
     AllPrinceProduct:0,
     Rebate:0,
     Prince:0,
-    AllRebate:0
+    AllRebate:0,
+    UsersApi:[]
 
   }),
 
-  // productlarni becentdan qabul qilyabdi
+  // productlar va kartigoriyalarni  bekentdan qabul qilyabdi
   actions:{
-     async GET_PRODUCTS_API  () {
+    async GET_PRODUCTS_API  () {
       try {
-        const Fetch_Product = await axios.get('https://insofuz.herokuapp.com/productlar/');
-        this.ProductsApi = Fetch_Product.data;
-        console.log(this.ProductsApi);
+        const Fetch_Product = await axios.get('http://insofuzlast.pythonanywhere.com/productlar/')
+        this.ProductsApi = Fetch_Product.data
+        const Fetch_Cartigoriya = await axios.get('http://insofuzlast.pythonanywhere.com/categoriya/')
+        this.CategoriyasApi = Fetch_Cartigoriya.data
+        console.log(this.ProductsApi)
       }
       catch (err) {
-        console.log(err);
+        console.log(err)
       }
     },
+
+    // maxsuloti qiymatini oshirish
 
     INCREMENT(id) {
-      for(let i=0 ; i < this.Orders.length ; i++ ){
-        if(this.Orders[i].id==id && this.Orders[i].quantity<20 ){
-          this.Orders[i].quantity++
+      this.Orders.forEach(el => {
+        if(el.id==id && el.quantity<20 ){
+          el.quantity++
         }
-      }
-    },
+      })
 
+    },
+    // maxsuloti qiymatini kamaytirish
     DECREMENT(id) {
-      for(let i=0 ; i < this.Orders.length ; i++ ){
-        if(this.Orders[i].id==id && this.Orders[i].quantity>1 ){
-          this.Orders[i].quantity--
+      this.Orders.forEach(el => {
+        if(el.id==id && el.quantity>1 ){
+          el.quantity--
         }
-      }
+      })
     },
-
+    // maxsulotni o'chirish
     DELETE(id){
       this.Orders.splice(id,1)
     },
-
+    // umumiy narxni va umumiy chegirma narxni xisoblash
     ALL_PRINCE_CALCULATION(){
       this.AllPrinceProducts=0
       this.AllRebate=0
@@ -54,28 +61,27 @@ export const useCounterStore = defineStore('store', {
         this.AllPrinceProduct=0
         this.Rebate=0
         this.Prince=0
-        if(elem.chegirma_narx > 0){
-          this.AllPrinceProduct=elem.chegirma_narx*elem.quantity
-          this.Prince=elem.narx*elem.quantity
+        this.AllPrinceProduct=elem.narx*elem.quantity
+        this.AllPrinceProducts+=this.AllPrinceProduct
+
+        if(elem.eski_narx > 0){
+          this.Prince=elem.eski_narx*elem.quantity
           this.Rebate=this.Prince-this.AllPrinceProduct
         }
-        else{
-          this.AllPrinceProduct=elem.narx*elem.quantity
-        }
-        this.AllPrinceProducts+=this.AllPrinceProduct
+
         this.AllRebate+=this.Rebate
-      });
+      })
     }
 
   },
-  
+
 })
 
 /*
  * If not building with SSR mode, you can
- * directly export the Store instantiation;
+ * directly export the Store instantiation
  *
- * The function below can be async too; either use
+ * The function below can be async too either use
  * async/await or return a Promise which resolves
  * with the Store instance.
  */

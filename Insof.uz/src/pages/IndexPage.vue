@@ -1,8 +1,8 @@
 <template>
   <q-page class="">
     <Carusel />
-    <div class="heading text-h4">Catgoriyalar</div>
-    <CategoryCards />
+    <div class="heading text-h4">Kartegoriyalar</div>
+    <CategoryCards class="mt-20px" />
     <div class="w-100pr">
       <div class="heading text-h4 q-mt-xl">Chegirmalar</div>
       <div
@@ -89,7 +89,7 @@ function GetFilterProducts() {
   });
 
   necessary_products.value = products_api.value.filter(function (elem) {
-    return elem;
+    return elem.kerakli==true
   });
 }
 // bekentdan malumotlar keilganini tekshiradi va filtrlaydi

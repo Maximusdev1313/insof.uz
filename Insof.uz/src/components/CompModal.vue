@@ -13,10 +13,8 @@
         </div>
         <div class="modal__text">
           <p class="p-1">{{props.product[0].nomi}}</p>
-          <p v-if="props.product[0].chegirma_narx > 0 ?true :false" style="color: #999999;">Narxi: <del> {{props.product[0].narx}} so'm</del></p>
-          <p v-if="props.product[0].chegirma_narx < 1 ?true :false" style="color: #999999;">Narxi: <span> {{props.product[0].narx}} so'm</span></p>
-          <p v-if="props.product[0].chegirma_narx > 0 ?true :false" style="color: #999999;"> Chegirma Narxi: <span> {{props.product[0].chegirma_narx}} so'm</span></p>
-          
+          <p v-if="props.product[0].eski_narx > 0 ?true :false" style="color: #999999;"> Narxi: <del> {{props.product[0].eski_narx}} so'm</del></p>
+          <p style="color: #999999;">Narxi: <span> {{props.product[0].narx}} so'm</span></p>          
         </div>
         <div class="modal__sena ">
           <div class="modal__sena--active  row  justify-between">
@@ -25,8 +23,7 @@
             <div><q-btn @click="increment()" >+</q-btn></div>
           </div>
           <div class="q-mt-md">
-            <span v-if="props.product[0].chegirma_narx > 0 ?true :false">  {{props.product[0].chegirma_narx * quantity}} so'm</span>
-            <span v-if="props.product[0].chegirma_narx < 1 ?true :false">  {{props.product[0].narx * quantity}} so'm</span>
+            <span>  {{props.product[0].narx * quantity}} so'm</span>
           </div>
         </div>
       </div>
@@ -82,8 +79,11 @@ import { useCounterStore } from "../stores/index"
       nomi:product.value[0].nomi,
       narx:product.value[0].narx,
       chegirma_foizi:product.value[0].chegirma_foizi,
-      chegirma_narx:product.value[0].chegirma_narx,
-      rasmlari:product.value[0].rasmlari
+      eski_narx:product.value[0].eski_narx,
+      rasmlari:product.value[0].rasmlari,
+      kilogramm:product.value[0].kilogramm,
+      litri:product.value[0].litri,
+      soni:product.value[0].soni
     }
     // maxsulot oldin qo'shilgan yoki qo'shilganligini tekshirish
     let check
