@@ -96,18 +96,18 @@ function sendUserInfo() {
   let random = Math.floor(Math.random() * 90) + 10 ;
   id = time_string.slice(7) + random
   console.log(id);
-  // fetch("http://insofuzlast.pythonanywhere.com/user/", {
-  //   method: "POST",
-  //   headers: { "Content-Type": "application/json" },
-  //   body: JSON.stringify({
-  //     id: id,
-  //     userName: fname.value,
-  //     phoneNumber: tel_number.value,
-  //     address: adress.value,
-  //     comment: comment.value,
-  //     location: user_position.value,
-  //   }),
-  // })
+  fetch("http://insofuzlast.pythonanywhere.com/user/", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      id: id,
+      userName: fname.value,
+      phoneNumber: tel_number.value,
+      address: adress.value,
+      comment: comment.value,
+      location: user_position.value,
+    }),
+  })
 }
 
 // maxsulotlarni jo'natish
@@ -122,7 +122,7 @@ function sendOrders(){
           weight: el.quantity,
           price: el.narx,
           total_price: el.narx * el.quantity,
-          orderForUser: user_id.value,
+          orderForUser: id
         }),
       })
       console.log("klagram");
@@ -137,7 +137,7 @@ function sendOrders(){
           litr:el.litri,
           price: el.narx,
           total_price: el.narx * el.quantity,
-          orderForUser: user_id.value,
+          orderForUser: id
         }),
       })
       console.log("ichimlik");
@@ -151,7 +151,7 @@ function sendOrders(){
           quantity: el.quantity,
           price: el.narx,
           total_price: el.narx * el.quantity,
-          orderForUser: user_id.value,
+          orderForUser: id
         }),
       })
       console.log("donaki");
@@ -162,9 +162,9 @@ function sendOrders(){
 async function send() {
   sendUserInfo()
 
-  // setTimeout(() => {
-  //   sendOrders()
-  // }, 500);
+  setTimeout(() => {
+    sendOrders()
+  }, 500);
 
 }
 </script>
